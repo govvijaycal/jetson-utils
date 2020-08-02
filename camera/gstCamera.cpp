@@ -136,11 +136,13 @@ bool gstCamera::buildLaunchStr()
 	#if NV_TENSORRT_MAJOR > 4
 		// on newer JetPack's, it's common for CSI camera to need flipped
 		// so here we reverse FLIP_NONE with FLIP_ROTATE_180
+		// VG (8/2/2020): I found this flip was not working for my cameras, so removed this logic.
+		/*
 		if( mOptions.flipMethod == videoOptions::FLIP_NONE )
 			mOptions.flipMethod = videoOptions::FLIP_ROTATE_180;
 		else if( mOptions.flipMethod == videoOptions::FLIP_ROTATE_180 )
 			mOptions.flipMethod = videoOptions::FLIP_NONE;
-	
+	        */
 		ss << "nvarguscamerasrc sensor-id=" << mOptions.resource.port << " ! video/x-raw(memory:NVMM), width=(int)" << GetWidth() << ", height=(int)" << GetHeight() << ", framerate=" << (int)mOptions.frameRate << "/1, format=(string)NV12 ! nvvidconv flip-method=" << mOptions.flipMethod << " ! ";
 	#else
 		// older JetPack versions use nvcamerasrc element instead of nvarguscamerasrc
